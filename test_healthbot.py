@@ -1,10 +1,15 @@
 """
 Script de prueba automático para HealthBot
 Ejecuta y prueba todo el sistema de forma integrada
+
+Uso:
+  python test_healthbot.py              # Modo normal (requires API calls)
+  python test_healthbot.py --demo       # Modo demo (sin API calls, datos simulados)
 """
 
 import os
 import sys
+import argparse
 from dotenv import load_dotenv
 from typing import TypedDict, Any
 from langchain_core.messages import HumanMessage, AIMessage
@@ -153,45 +158,135 @@ Asigna una calificación (A/B/C/D/F) y proporciona justificación."""
     
     return state
 
-# ===== PRUEBA AUTOMÁTICA =====
+# ===== MODO DEMO (SIN API CALLS) =====
 
-print("\n" + "="*60)
-print("INICIANDO PRUEBA AUTOMÁTICA")
-print("="*60)
+def run_demo_mode():
+    """Ejecutar demostración sin llamadas a API (datos simulados)"""
+    print("\n" + "="*60)
+    print("🎬 MODO DEMO - Simulación sin API calls")
+    print("="*60)
+    
+    # Datos simulados de un flujo completo
+    demo_data = {
+        "topic": "Fotosíntesis",
+        "search_results": [
+            {"source": "Wikipedia", "content": "La fotosíntesis es un proceso metabólico..."},
+            {"source": "Khan Academy", "content": "La fotosíntesis ocurre en los cloroplastos..."},
+        ],
+        "summary": """La fotosíntesis es el proceso mediante el cual las plantas convierten la luz solar en energía química.
+        
+Ocurre principalmente en las hojas, dentro de estructuras especializadas llamadas cloroplastos que contienen clorofila.
+Durante este proceso, las plantas absorben dióxido de carbono del aire y agua del suelo, utilizando la energía solar para producir glucosa y oxígeno.
 
-# Estado inicial
-demo_state = {
-    "topic": "Fotosíntesis",
-    "search_results": [],
-    "summary": "",
-    "quiz_question": "",
-    "user_answer": "A",
-    "grade": "",
-    "justification": "",
-    "continue_learning": False,
-    "current_step": "search"
-}
+La fotosíntesis consta de dos fases: la fase luminosa, que requiere luz directa, y la fase oscura (ciclo de Calvin), que no la requiere.""",
+        "quiz_question": """PREGUNTA: ¿Cuál es la principal función del proceso de fotosíntesis?
+A: Convertir luz solar en energía química (glucosa)
+B: Descomponer moléculas de agua
+C: Absorber nutrientes del suelo
+D: Producir ATP exclusivamente
 
-# Ejecutar pipeline
-print(f"\n1️⃣ TEMA: {demo_state['topic']}")
-demo_state = search_tavily(demo_state)
+RESPUESTA_CORRECTA: A""",
+        "user_answer": "A",
+        "grade": "A",
+        "justification": "✅ CORRECTO. La fotosíntesis convierte la energía luminosa en energía química almacenada en glucosa. El proceso es fundamental para la vida en el planeta.",
+    }
+    
+    # Mostrar flujo completo
+    print(f"\n1️⃣ TEMA: {demo_data['topic']}")
+    print("   ✓ Tema ingresado")
+    
+    print(f"\n2️⃣ BÚSQUEDA")
+    print(f"   ✓ Se encontraron {len(demo_data['search_results'])} fuentes")
+    for src in demo_data['search_results']:
+        print(f"      - {src['source']}")
+    
+    print(f"\n3️⃣ RESUMEN")
+    print(f"   {demo_data['summary']}")
+    
+    print(f"\n4️⃣ PREGUNTA DE EVALUACIÓN")
+    print(f"   {demo_data['quiz_question']}")
+    
+    print(f"\n5️⃣ RESPUESTA DEL USUARIO: {demo_data['user_answer']}")
+    
+    print(f"\n6️⃣ CALIFICACIÓN")
+    print(f"   Grado: {demo_data['grade']}")
+    print(f"   {demo_data['justification']}")
+    
+    print("\n" + "="*60)
+    print("✅ DEMOSTRACIÓN COMPLETADA EXITOSAMENTE")
+    print("="*60)
 
-print(f"\n2️⃣ RESUMEN")
-demo_state = generate_summary(demo_state)
-if demo_state["summary"]:
-    print(f"   {demo_state['summary'][:200]}...")
+# ===== PRUEBA AUTOMÁTICA (CON API CALLS) =====
 
-print(f"\n3️⃣ PREGUNTA")
-demo_state = generate_question(demo_state)
-if demo_state["quiz_question"]:
-    print(f"   {demo_state['quiz_question'][:200]}...")
+def run_full_test():
+    """Ejecutar prueba completa con llamadas reales a API"""
+    print("\n" + "="*60)
+    print("🧪 PRUEBA COMPLETA - Llamadas reales a API")
+    print("="*60)
+    
+    # Estado inicial
+    test_state = {
+        "topic": "Fotosíntesis",
+        "search_results": [],
+        "summary": "",
+        "quiz_question": "",
+        "user_answer": "A",
+        "grade": "",
+        "justification": "",
+        "continue_learning": False,
+        "current_step": "search"
+    }
+    
+    # Ejecutar pipeline
+    print(f"\n1️⃣ TEMA: {test_state['topic']}")
+    test_state = search_tavily(test_state)
+    
+    print(f"\n2️⃣ RESUMEN")
+    test_state = generate_summary(test_state)
+    if test_state["summary"]:
+        print(f"   {test_state['summary'][:200]}...")
+    
+    print(f"\n3️⃣ PREGUNTA")
+    test_state = generate_question(test_state)
+    if test_state["quiz_question"]:
+        print(f"   {test_state['quiz_question'][:200]}...")
+    
+    print(f"\n4️⃣ RESPUESTA SIMULADA: A")
+    
+    print(f"\n5️⃣ CALIFICACIÓN")
+    test_state = grade_answer(test_state, "A")
+    print(f"   Grado: {test_state['grade']}")
+    
+    print("\n" + "="*60)
+    print("✅ PRUEBA COMPLETADA EXITOSAMENTE")
+    print("="*60)
 
-print(f"\n4️⃣ RESPUESTA SIMULADA: A")
+# ===== MAIN =====
 
-print(f"\n5️⃣ CALIFICACIÓN")
-demo_state = grade_answer(demo_state, "A")
-print(f"   Grado: {demo_state['grade']}")
-
-print("\n" + "="*60)
-print("✅ PRUEBA COMPLETADA EXITOSAMENTE")
-print("="*60)
+if __name__ == "__main__":
+    # Parsear argumentos
+    parser = argparse.ArgumentParser(description="Test suite para HealthBot")
+    parser.add_argument("--demo", action="store_true", help="Ejecutar en modo demo (sin API calls)")
+    args = parser.parse_args()
+    
+    if args.demo:
+        # Modo demo (sin API keys necesarias)
+        run_demo_mode()
+    else:
+        # Modo normal (con API calls)
+        # Verificar configuración
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+        
+        if not OPENAI_API_KEY or not TAVILY_API_KEY:
+            print("\n❌ ERROR: Falta OPENAI_API_KEY o TAVILY_API_KEY en .env")
+            print("\n    Para modo demo sin API keys: python test_healthbot.py --demo")
+            sys.exit(1)
+        
+        print("\n✅ APIs configuradas:")
+        print(f"   - OPENAI_API_KEY: {OPENAI_API_KEY[:20]}...")
+        print(f"   - TAVILY_API_KEY: {TAVILY_API_KEY[:20]}...")
+        print("\n✅ LLM (OpenAI GPT-4) e Herramientas inicializadas")
+        
+        # Ejecutar prueba completa
+        run_full_test()

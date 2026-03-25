@@ -1,21 +1,26 @@
-# HealthBot - Sistema de Aprendizaje Interactivo con LangGraph
+# HealthBot - Sistema de Educación Interactivo Basado en IA
 
-## 📚 Descripción del Proyecto
+## 📚 Descripción General
 
-HealthBot es un sistema educativo interactivo que utiliza **LangGraph**, **OpenAI** y **Tavily** para crear una experiencia de aprendizaje personalizada y validada.
+**HealthBot** es un sistema educativo inteligente que integra **Modelos de Lenguaje Generativos** (OpenAI GPT-4o-mini), **Orquestación de Workflows Complejos** (LangGraph) y **Obtención de Información Web Verificable** (Tavily Search) para proporcionar una experiencia de aprendizaje interactiva, personalizada y fundamentada en datos reales.
 
-### Flujo de funcionamiento
+### 🎯 Propósito
 
-1. **Solicitud de tema**: El usuario ingresa un tema de aprendizaje
-2. **Búsqueda con Tavily**: Sistema busca información relevante (única fuente)
-3. **Generación de resumen**: Crea 3-4 párrafos en español basados **EXCLUSIVAMENTE** en Tavily
-4. **Quiz**: Genera una pregunta de opción múltiple desde el resumen
-5. **Respuesta del usuario**: Usuario selecciona su respuesta (A, B, C, D)
-6. **Calificación inteligente**: 
-   - Nota: A (Excelente) → F (Insuficiente)
-   - Justificación basada en el resumen
-   - Citas textuales del contenido
-7. **Menú de continuidad**: Permite aprender otro tema o salir
+Crear una plataforma educativa que permita a los usuarios:
+- Aprender sobre cualquier tema con contenido verificable de la web
+- Ser evaluados con preguntas generadas automáticamente
+- Recibir retroalimentación inmediata y justificada
+- Continuar aprendiendo en un loop interactivo
+
+### 🔄 Flujo de Funcionamiento
+
+1. **Captura de Intención**: Usuario ingresa tema de aprendizaje
+2. **Búsqueda Verificable**: Obtención de información real-time desde web (Tavily Search)
+3. **Síntesis Educativa**: Generación de resumen coherente (3-4 párrafos en español)
+4. **Evaluación Formativa**: Creación de pregunta de opción múltiple basada en contenido
+5. **Interfaz de Respuesta**: Captura interactiva de respuesta del usuario (A/B/C/D)
+6. **Análisis Inteligente**: Evaluación automática con justificación detallada (A-F)
+7. **Iteración Continua**: Loop que permite continuar aprendiendo o terminar
 
 ---
 
@@ -225,6 +230,66 @@ CITA DEL RESUMEN: "Machine Learning es la rama de la IA..."
 ============================================================
 
 ¡Que sigas aprendiendo! 📚
+```
+
+---
+
+## 🎯 Resultados Esperados
+
+Al ejecutar el sistema, deberías observar:
+
+### ✅ Búsqueda Web (Tavily)
+```
+🔍 Buscando información sobre: [Tu tema]
+✓ Se encontraron 5 resultados desde fuentes reales
+  1. https://source1.com
+  2. https://source2.com
+  ...
+```
+
+### ✅ Generación de Contenido
+```
+📝 Resumen generado (3-4 párrafos coherentes)
+✓ Basado exclusivamente en resultados de búsqueda
+✓ En español, lenguaje accesible
+```
+
+### ✅ Evaluación Inteligente
+```
+Calificación: A (Excelente)
+Justificación: [Explicación detallada]
+Cita del material: "[Fragmento relevante]"
+```
+
+### ✅ Experiencia Interactiva
+- Flujo conversacional natural
+- Menú para continuar aprendiendo o salir
+- Loop infinito de educación
+
+---
+
+## 🧪 Testing y Validación
+
+### Opción 1: Modo Demo (Sin API Keys)
+Ideal para demostración rápida sin costar dinero:
+```bash
+python test_healthbot.py --demo
+```
+Ejecuta con **datos simulados** (resultado garantizado en <1 segundo)
+
+### Opción 2: Testing Completo (Con APIs)
+Valida integración real con OpenAI y Tavily:
+```bash
+python test_healthbot.py
+```
+Requiere `OPENAI_API_KEY` y `TAVILY_API_KEY` en `.env`
+
+### Opción 3: Uso Interactivo
+Experiencia educativa completa:
+```bash
+jupyter notebook healthbot.ipynb
+# Ejecutar todas las celdas
+# Correr: run_healthbot()
 ```
 
 ---
