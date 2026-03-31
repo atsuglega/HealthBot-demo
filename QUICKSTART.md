@@ -1,232 +1,232 @@
-# 🚀 Guía Rápida de Inicio - HealthBot
+# 🚀 Quick Start Guide - HealthBot
 
-Instrucciones paso a paso para empezar en 5 minutos.
+Step-by-step instructions to get started in 5 minutes.
 
 ---
 
-## ⚡ 5 Pasos para Comenzar
+## ⚡ 5 Steps to Get Started
 
-### 1️⃣ Configurar Variables de Entorno (1 min)
+### 1️⃣ Configure Environment Variables (1 min)
 
-Crea un archivo `.env` en la carpeta del proyecto con tus API keys:
+Create a `.env` file in the project folder with your API keys:
 
 ```bash
 # Windows/Mac/Linux - Terminal
 cd c:\Users\pablo\Desktop\HealthBot-demo
 
-# Crea archivo .env:
+# Create .env file:
 echo OPENAI_API_KEY=sk-[YOUR_KEY_HERE] > .env
 echo TAVILY_API_KEY=tvly-[YOUR_KEY_HERE] >> .env
 ```
 
-**¿Dónde obtener las keys?**
+**Where to get the keys?**
 - OpenAI: https://platform.openai.com/api-keys
 - Tavily: https://tavily.com
 
 ---
 
-### 2️⃣ Abrir el Notebook (1 min)
+### 2️⃣ Open the Notebook (1 min)
 
-**Opción A: VS Code**
+**Option A: VS Code**
 ```bash
 code healthbot.ipynb
 ```
 
-**Opción B: Google Colab**
-- Ve a https://colab.research.google.com
-- Sube el archivo `healthbot.ipynb`
-- En Colab, escribe las keys cuando se solicite
+**Option B: Google Colab**
+- Go to https://colab.research.google.com
+- Upload the `healthbot.ipynb` file
+- In Colab, enter the keys when prompted
 
 ---
 
-### 3️⃣ Instalar Dependencias (2 min)
+### 3️⃣ Install Dependencies (2 min)
 
-**Opción A: Automático (recomendado)**
-- Abre el notebook
-- Ejecuta la primera celda
-- Esperapara que terminen las instalaciones
+**Option A: Automatic (recommended)**
+- Open the notebook
+- Run the first cell
+- Wait for installations to complete
 
-**Opción B: Manual**
+**Option B: Manual**
 ```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-### 4️⃣ Ejecutar Todas las Celdas (1 min)
+### 4️⃣ Run All Cells (1 min)
 
-En VS Code o Colab:
-- Presiona `Ctrl+A` (seleccionar todo)
-- Presiona `Shift+Enter` (ejecutar)
-- **O** ejecuta cada celda de arriba a abajo manualmente
+In VS Code or Colab:
+- Press `Ctrl+A` (select all)
+- Press `Shift+Enter` (execute)
+- **Or** run each cell manually from top to bottom
 
-Verás un mensaje verde: `✓ Grafo de LangGraph compilado exitosamente`
+You should see a green message: `✓ LangGraph graph compiled successfully`
 
 ---
 
-### 5️⃣ Iniciar el Sistema (30 seg)
+### 5️⃣ Start the System (30 sec)
 
-En la última celda, ejecuta:
+In the last cell, execute:
 
 ```python
 run_healthbot()
 ```
 
-¡Sigue los prompts en pantalla!
+Follow the on-screen prompts!
 
 ---
 
-## 📚 Ejemplo de Uso
+## 📚 Usage Example
 
 ```
 ============================================================
-🎓 BIENVENIDO A HEALTHBOT
+🎓 WELCOME TO HEALTHBOT
 ============================================================
 
-📚 ¿Cuál es el tema que deseas aprender?
-➜ Inteligencia Artificial
+📚 What topic would you like to learn about?
+➜ Artificial Intelligence
 
-[Sistema trabaja...]
-
-============================================================
-📖 RESUMEN DEL TEMA
-============================================================
-
-La Inteligencia Artificial (IA) es...
+[System working...]
 
 ============================================================
-❓ PREGUNTA DEL QUIZ
+📖 TOPIC SUMMARY
 ============================================================
 
-¿Cuál es la rama de la IA que se enfoca en machine learning?
+Artificial Intelligence (AI) is...
+
+============================================================
+❓ QUIZ QUESTION
+============================================================
+
+Which branch of AI focuses on machine learning?
 A) Computer Vision
 B) Machine Learning
 C) Natural Language Processing
 D) Robotics
 
-✏️ Tu respuesta (A, B, C o D): B
+✏️ Your answer (A, B, C, or D): B
 
-[Sistema evalúa...]
-
-============================================================
-📊 RESULTADOS
-============================================================
-
-Tu respuesta: B
-CALIFICACIÓN: 🌟 EXCELENTE
-
-[Justificación con citas del resumen]
+[System evaluating...]
 
 ============================================================
-¿QUÉ DESEAS HACER?
+📊 RESULTS
 ============================================================
 
-1. Aprender un nuevo tema
-2. Salir del sistema
+Your answer: B
+GRADE: 🌟 EXCELLENT
 
-➜ Selecciona una opción: 2
+[Justification with summary citations]
 
-👋 ¡Gracias por usar HealthBot!
+============================================================
+WHAT WOULD YOU LIKE TO DO?
+============================================================
+
+1. Learn a new topic
+2. Exit the system
+
+➜ Select an option: 2
+
+👋 Thank you for using HealthBot!
 ```
 
 ---
 
-## 🐛 Solución Rápida de Problemas
+## 🐛 Quick Troubleshooting
 
 ### ❌ "Error: OPENAI_API_KEY not found"
 ```bash
-# Verifica que el archivo .env existe:
+# Verify the .env file exists:
 ls .env     # Windows: dir .env
 
-# Si no existe, créalo:
+# If it doesn't exist, create it:
 echo OPENAI_API_KEY=sk-... > .env
 echo TAVILY_API_KEY=tvly-... >> .env
 ```
 
 ### ❌ "ModuleNotFoundError: No module named 'langgraph'"
 ```bash
-# Reinstala dependencias:
+# Reinstall dependencies:
 pip install --upgrade -r requirements.txt
 ```
 
-### ❌ "No se encontraron resultados de búsqueda"
-- Intenta con un tema más general
-- Verifica tu conexión a internet
-- Verifica tu TAVILY_API_KEY
+### ❌ "No search results found"
+- Try with a more general topic
+- Verify your internet connection
+- Check your TAVILY_API_KEY
 
-### ❌ "Connection timeout al API"
-- Aumenta el timeout en la configuración
-- Verifica que tus keys sean válidas
-- Revisa tu límite de API (quota)
+### ❌ "Connection timeout to API"
+- Increase the timeout in the configuration
+- Verify that your keys are valid
+- Check your API limit (quota)
 
 ---
 
-## 📁 Estructura de Archivos
+## 📁 File Structure
 
 ```
 HealthBot-demo/
-├── healthbot.ipynb          ← 🎯 ARCHIVO PRINCIPAL
-├── README.md                ← Documentación completa
-├── ARCHITECTURE.md          ← Diseño del grafo
-├── PROMPTS.md               ← Explicación de restricciones
-├── TESTING.md               ← Guía de pruebas
-├── CONFIG.md                ← Personalización
-├── ROADMAP.md               ← Mejoras futuras
-├── .env.example             ← Plantilla de variables
-├── .env                     ← TUS KEYS (crear)
-└── requirements.txt         ← Dependencias
+├── healthbot.ipynb          ← 🎯 MAIN FILE
+├── README.md                ← Complete documentation
+├── ARCHITECTURE.md          ← Graph design
+├── PROMPTS.md               ← Constraint explanation
+├── TESTING.md               ← Testing guide
+├── CONFIG.md                ← Customization
+├── ROADMAP.md               ← Future improvements
+├── .env.example             ← Variables template
+├── .env                     ← YOUR KEYS (create)
+└── requirements.txt         ← Dependencies
 ```
 
 ---
 
-## 🎯 Qué hace el sistema
+## 🎯 What the system does
 
-✅ **Busca** información con Tavily (ÚNICA fuente)  
-✅ **Genera** resumen en español (3-4 párrafos)  
-✅ **Crea** pregunta tipo quiz  
-✅ **Obtiene** tu respuesta  
-✅ **Califica** con nota A-F + justificación  
-✅ **Permite** aprender otro tema o salir  
+✅ **Searches** information with Tavily (UNIQUE source)  
+✅ **Generates** summary in English (3-4 paragraphs)  
+✅ **Creates** quiz-type question  
+✅ **Gets** your answer  
+✅ **Grades** with note A-F + justification  
+✅ **Allows** learning another topic or exit  
 
 ---
 
 ## 💡 Tips
 
-- **Temas específicos funcionan mejor**: "Fotosíntesis en plantas acuáticas" > "Biología"
-- **Reinicia si hay errores**: Los errores de API son temporales
-- **Revisa el resumen**: Entiende bien antes de responder
-- **Lee la justificación**: Aprende de los errores
+- **Specific topics work better**: "Photosynthesis in aquatic plants" > "Biology"
+- **Restart if errors occur**: API errors are temporary
+- **Review the summary**: Understand well before answering
+- **Read the justification**: Learn from your mistakes
 
 ---
 
-## 📞 Necesitas ayuda?
+## 📞 Need help?
 
-1. Documentación: `README.md`
-2. Grafo del sistema: `ARCHITECTURE.md`
-3. Guía de tests: `TESTING.md`
-4. Configuración avanzada: `CONFIG.md`
+1. Documentation: `README.md`
+2. System graph: `ARCHITECTURE.md`
+3. Testing guide: `TESTING.md`
+4. Advanced configuration: `CONFIG.md`
 5. Roadmap: `ROADMAP.md`
 
 ---
 
-## ✨ ¡Listo para empezar!
+## ✨ Ready to get started!
 
 ```bash
-# Resumen de comandos
+# Summary of commands
 cd c:\Users\pablo\Desktop\HealthBot-demo
-code healthbot.ipynb    # Abrir en VS Code
-# O subir a Google Colab
+code healthbot.ipynb    # Open in VS Code
+# Or upload to Google Colab
 
-# Una vez en el notebook:
-# 1. Ejecuta todas las celdas
-# 2. En la última, escribe: run_healthbot()
-# 3. ¡Comienza a aprender!
+# Once in the notebook:
+# 1. Run all cells
+# 2. In the last one, type: run_healthbot()
+# 3. Start learning!
 ```
 
 ---
 
-**¿Estás listo? ¡Vamos a aprender! 🚀**
+**Ready? Let's learn! 🚀**
 
 ---
 
-Última actualización: Marzo 2026
+Last updated: March 2026

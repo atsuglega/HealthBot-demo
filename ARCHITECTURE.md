@@ -1,11 +1,11 @@
-# Diagrama de Flujo de HealthBot
+# HealthBot Flow Diagram
 
-## Arquitectura del Grafo de LangGraph
+## LangGraph Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         ESTADO COMPARTIDO                               │
-│  (HealthBotState - compartido entre todos los nodos)                   │
+│                         SHARED STATE                                    │
+│  (HealthBotState - shared between all nodes)                           │
 └─────────────────────────────────────────────────────────────────────────┘
                                     ▲
                                     │
@@ -21,86 +21,86 @@
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   1. INPUT_TOPIC (Nodo)           │
-                    │   - Solicitar tema del usuario    │
-                    │   - Validar entrada               │
-                    │   - Actualizar state["topic"]     │
+                    │   1. INPUT_TOPIC (Node)           │
+                    │   - Request topic from user       │
+                    │   - Validate input                │
+                    │   - Update state["topic"]         │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   2. SEARCH_TAVILY (Nodo)         │
-                    │   - Ejecutar búsqueda con Tavily  │
-                    │   - Obtener 5 resultados máximo   │
-                    │   - Actualizar state["search_...] │
+                    │   2. SEARCH_TAVILY (Node)         │
+                    │   - Execute Tavily search         │
+                    │   - Get max 5 results             │
+                    │   - Update state["search_...] │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   3. GENERATE_SUMMARY (Nodo)      │
-                    │   - Basado ÚNICAMENTE en Tavily   │
-                    │   - 3-4 párrafos en español       │
-                    │   - Restricción: No conocimiento  │
-                    │   - Actualizar state["summary"]   │
+                    │   3. GENERATE_SUMMARY (Node)      │
+                    │   - Based ONLY on Tavily          │
+                    │   - 3-4 paragraphs in English     │
+                    │   - Constraint: No knowledge      │
+                    │   - Update state["summary"]       │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   4. GENERATE_QUESTION (Nodo)     │
-                    │   - Pregunta tipo opción múltiple │
-                    │   - Basada en resumen             │
-                    │   - 4 opciones (A,B,C,D)          │
-                    │   - Actualizar state["quiz_...]   │
+                    │   4. GENERATE_QUESTION (Node)     │
+                    │   - Multiple-choice question      │
+                    │   - Based on summary              │
+                    │   - 4 options (A,B,C,D)           │
+                    │   - Update state["quiz_...]       │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   5. GET_USER_ANSWER (Nodo)       │
-                    │   - Mostrar resumen               │
-                    │   - Mostrar pregunta              │
-                    │   - Solicitar respuesta (A/B/C/D) │
-                    │   - Validar entrada               │
+                    │   5. GET_USER_ANSWER (Node)       │
+                    │   - Show summary                  │
+                    │   - Show question                 │
+                    │   - Request response (A/B/C/D)    │
+                    │   - Validate input                │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   6. GRADE_ANSWER (Nodo)          │
-                    │   - Evaluar respuesta del usuario │
-                    │   - Usar SOLO resumen como base   │
-                    │   - Asignar nota (A,B,C,D,F)      │
-                    │   - Proporcionar citas del resumen│
+                    │   6. GRADE_ANSWER (Node)          │
+                    │   - Evaluate user response        │
+                    │   - Use ONLY summary as base      │
+                    │   - Assign grade (A,B,C,D,F)      │
+                    │   - Provide summary citations     │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   7. SHOW_RESULTS (Nodo)          │
-                    │   - Mostrar calificación          │
-                    │   - Mostrar justificación         │
-                    │   - Mostrar citas textuales       │
+                    │   7. SHOW_RESULTS (Node)          │
+                    │   - Show grade                    │
+                    │   - Show justification            │
+                    │   - Show textual citations        │
                     └──────────────────────────────────┘
                                     │
                                     ▼
                     ┌──────────────────────────────────┐
-                    │   8. DECIDE_NEXT (Nodo)           │
-                    │   - Menú: Continuar o Salir       │
-                    │   - Actualizar flag continue      │
+                    │   8. DECIDE_NEXT (Node)           │
+                    │   - Menu: Continue or Exit        │
+                    │   - Update continue flag          │
                     └──────────────────────────────────┘
                                     │
                         ┌───────────┴───────────┐
                         │                       │
-                  Continue (1)            Salir (2)
+                  Continue (1)            Exit (2)
                         │                       │
                         ▼                       ▼
                   ┌──────────┐          ┌──────────┐
-                  │ Reiniciar│          │ Terminar │
-                  │  Flujo   │          │  (END)   │
-                  │(ir a 1)  │          └──────────┘
+                  │ Restart  │          │ Terminate│
+                  │  Flow    │          │  (END)   │
+                  │(go to 1) │          └──────────┘
                   └────┬─────┘
                        │
                      (Loop)
 ```
 
-## Flujo de Datos entre Nodos
+## Data Flow Between Nodes
 
 ```
 input_topic
@@ -109,16 +109,16 @@ input_topic
 search_tavily
     │ search_results
     ▼
-generate_summary (CRÍTICO: SOLO Tavily)
+generate_summary (CRITICAL: ONLY Tavily)
     │ summary
     ▼
-generate_question (Basado en summary)
+generate_question (Based on summary)
     │ quiz_question
     ▼
 get_user_answer
     │ user_answer
     ▼
-grade_answer (CRÍTICO: SOLO summary como fuente)
+grade_answer (CRITICAL: ONLY summary as source)
     │ grade, justification
     ▼
 show_results
@@ -130,9 +130,9 @@ decide_next
     └─ False → END
 ```
 
-## Aristas del Grafo
+## Graph Edges
 
-### Aristas directas (Determinísticas)
+### Direct Edges (Deterministic)
 - `input_topic` → `search_tavily`
 - `search_tavily` → `generate_summary`
 - `generate_summary` → `generate_question`
@@ -141,118 +141,118 @@ decide_next
 - `grade_answer` → `show_results`
 - `show_results` → `decide_next`
 
-### Aristas condicionales (Dinámicas)
+### Conditional Edges (Dynamic)
 ```python
 def should_continue(state):
     if state["continue_learning"]:
-        return "input_topic"  # Reiniciar
+        return "input_topic"  # Restart
     else:
-        return "end"  # Terminar
+        return "end"  # Terminate
 ```
 
-- `decide_next` → `input_topic` (si continue_learning == True)
-- `decide_next` → `__end__` (si continue_learning == False)
+- `decide_next` → `input_topic` (if continue_learning == True)
+- `decide_next` → `__end__` (if continue_learning == False)
 
-## Restricciones de Datos
+## Data Constraints
 
-### Nodo: generate_summary
+### Node: generate_summary
 ```
-📥 Entrada permitida:
+📥 Allowed Input:
    - state["search_results"] ✅
    
-📛 Entrada NO permitida:
-   - Knowledge previo del LLM ❌
-   - Información de internet (excepto Tavily) ❌
+📛 NOT Allowed Input:
+   - Prior LLM knowledge ❌
+   - Internet information (except Tavily) ❌
    
-📤 Salida:
-   - state["summary"]: String con 3-4 párrafos
+📤 Output:
+   - state["summary"]: String with 3-4 paragraphs
 ```
 
-### Nodo: generate_question
+### Node: generate_question
 ```
-📥 Entrada permitida:
+📥 Allowed Input:
    - state["summary"] ✅
    
-📛 Entrada NO permitida:
+📛 NOT Allowed Input:
    - state["search_results"] ❌
-   - Knowledge previo del LLM ❌
+   - Prior LLM knowledge ❌
    
-📤 Salida:
-   - state["quiz_question"]: String con pregunta + opciones
+📤 Output:
+   - state["quiz_question"]: String with question + options
 ```
 
-### Nodo: grade_answer
+### Node: grade_answer
 ```
-📥 Entrada permitida:
+📥 Allowed Input:
    - state["summary"] ✅
    - state["user_answer"] ✅
    - state["quiz_question"] ✅
    
-📛 Entrada NO permitida:
+📛 NOT Allowed Input:
    - state["search_results"] ❌
-   - Knowledge previo del LLM ❌
+   - Prior LLM knowledge ❌
    
-📤 Salida:
+📤 Output:
    - state["grade"]: String (A/B/C/D/F)
-   - state["justification"]: String con citas
+   - state["justification"]: String with citations
 ```
 
-## Ciclo de Vida del Estado
+## State Lifecycle
 
 ```
-Iteración 1:
-├─ topic: "Inteligencia Artificial"
-├─ search_results: [resultado1, resultado2, ...]
-├─ summary: "La IA es..."
-├─ quiz_question: "¿Cuál es...?"
+Iteration 1:
+├─ topic: "Artificial Intelligence"
+├─ search_results: [result1, result2, ...]
+├─ summary: "AI is..."
+├─ quiz_question: "What is...?"
 ├─ user_answer: "A"
 ├─ grade: "A"
 ├─ continue_learning: true
 │
-Iteración 2 (reinicio):
-├─ topic: "Machine Learning"  ← Nueva entrada
-├─ search_results: [...]         ← Nuevos resultados
-├─ summary: "ML es..."           ← Nuevo resumen
-├─ quiz_question: "¿Cómo...?"    ← Nueva pregunta
-├─ user_answer: "C"              ← Nueva respuesta
-├─ grade: "B"                     ← Nueva calificación
-├─ continue_learning: false       ← Decisión final
+Iteration 2 (restart):
+├─ topic: "Machine Learning"  ← New input
+├─ search_results: [...]         ← New results
+├─ summary: "ML is..."           ← New summary
+├─ quiz_question: "How...?"      ← New question
+├─ user_answer: "C"              ← New response
+├─ grade: "B"                     ← New grade
+├─ continue_learning: false       ← Final decision
 │
-Fin del flujo
+End of flow
 ```
 
-## Validaciones Implementadas
+## Implemented Validations
 
 ```python
-# Validación 1: Entrada del usuario
+# Validation 1: User input
 validate_input = topic.strip() != ""
 
-# Validación 2: Búsqueda exitosa
+# Validation 2: Successful search
 has_results = len(search_results) > 0
 
-# Validación 3: Resumen generado (no vacío)
+# Validation 3: Generated summary (not empty)
 summary_valid = len(summary) > 100
 
-# Validación 4: Respuesta válida
+# Validation 4: Valid response
 answer_valid = user_answer in ["A", "B", "C", "D"]
 
-# Validación 5: Opción de continuidad
+# Validation 5: Continuity option
 continue_choice_valid = choice in ["1", "2"]
 ```
 
-## Manejo de Errores
+## Error Handling
 
 ```
 try:
     ├─ Tavily API Error
-    │  └─ → Mostrar mensaje, usar estado vacío
+    │  └─ → Show message, use empty state
     │
     ├─ OpenAI API Error
-    │  └─ → Mostrar mensaje, usar respuesta por defecto
+    │  └─ → Show message, use default response
     │
     ├─ Input Validation Error
-    │  └─ → Solicitar reingreso
+    │  └─ → Request re-entry
     │
     └─ General Exception
-       └─ → Registrar, continuar o abortar gracefully
+       └─ → Log, continue or abort gracefully
 ```

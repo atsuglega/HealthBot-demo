@@ -1,200 +1,200 @@
-# HealthBot - Sistema de Educación Interactivo Basado en IA
+# HealthBot - Interactive AI-Powered Educational System
 
-## 📚 Descripción General
+## 📚 Overview
 
-**HealthBot** es un sistema educativo inteligente que integra **Modelos de Lenguaje Generativos** (OpenAI GPT-4o-mini), **Orquestación de Workflows Complejos** (LangGraph) y **Obtención de Información Web Verificable** (Tavily Search) para proporcionar una experiencia de aprendizaje interactiva, personalizada y fundamentada en datos reales.
+**HealthBot** is an intelligent educational system that integrates **Generative Language Models** (OpenAI GPT-4o-mini), **Complex Workflow Orchestration** (LangGraph), and **Verified Web Information Retrieval** (Tavily Search) to provide an interactive, personalized, and data-driven learning experience.
 
-### 🎯 Propósito
+### 🎯 Purpose
 
-Crear una plataforma educativa que permita a los usuarios:
-- Aprender sobre cualquier tema con contenido verificable de la web
-- Ser evaluados con preguntas generadas automáticamente
-- Recibir retroalimentación inmediata y justificada
-- Continuar aprendiendo en un loop interactivo
+Create an educational platform that enables users to:
+- Learn about any topic with verifiable web content
+- Be evaluated with automatically generated questions
+- Receive immediate and justifiable feedback
+- Continue learning in an interactive loop
 
-### 🔄 Flujo de Funcionamiento
+### 🔄 Workflow Flow
 
-1. **Captura de Intención**: Usuario ingresa tema de aprendizaje
-2. **Búsqueda Verificable**: Obtención de información real-time desde web (Tavily Search)
-3. **Síntesis Educativa**: Generación de resumen coherente (3-4 párrafos en español)
-4. **Evaluación Formativa**: Creación de pregunta de opción múltiple basada en contenido
-5. **Interfaz de Respuesta**: Captura interactiva de respuesta del usuario (A/B/C/D)
-6. **Análisis Inteligente**: Evaluación automática con justificación detallada (A-F)
-7. **Iteración Continua**: Loop que permite continuar aprendiendo o terminar
+1. **Intent Capture**: User enters a learning topic
+2. **Verified Search**: Real-time information retrieval from web (Tavily Search)
+3. **Educational Synthesis**: Coherent summary generation (3-4 paragraphs in English)
+4. **Formative Evaluation**: Multiple-choice question creation based on content
+5. **Response Interface**: Interactive user response capture (A/B/C/D)
+6. **Intelligent Analysis**: Automated evaluation with detailed justification (A-F)
+7. **Continuous Iteration**: Loop allowing continued learning or exit
 
 ---
 
-## 🔧 Requisitos Técnicos
+## 🔧 Technical Requirements
 
-### Dependencias principales
+### Main Dependencies
 
 ```
-langgraph          # Orquestación de flujos
-langchain          # Integración de LLMs y herramientas
-langchain-openai   # Modelo GPT-4 de OpenAI
-langchain-tavily   # Integración con Tavily Search
-python-dotenv      # Gestión de variables de entorno
+langgraph          # Workflow orchestration
+langchain          # LLM and tool integration
+langchain-openai   # OpenAI GPT-4 model
+langchain-tavily   # Tavily Search integration
+python-dotenv      # Environment variable management
 ```
 
-### API Keys necesarias
+### Required API Keys
 
 - **OpenAI**: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-  - Modelo: `gpt-4o-mini`
+  - Model: `gpt-4o-mini`
   
 - **Tavily**: [https://tavily.com](https://tavily.com)
-  - Búsqueda web con hasta 5 resultados por consulta
+  - Web search with up to 5 results per query
 
 ---
 
-## ⚙️ Configuración e Instalación
+## ⚙️ Configuration and Installation
 
-### 1. Clonar o descargar el proyecto
+### 1. Clone or download the project
 
 ```bash
 cd HealthBot-demo
 ```
 
-### 2. Crear variables de entorno
+### 2. Create environment variables
 
-Crea un archivo `.env` en la carpeta raíz:
+Create a `.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=sk-your-key-here
 TAVILY_API_KEY=tvly-your-key-here
 ```
 
-**Alternativa**: Si usas Google Colab, puedes dejar que el notebook solicite las keys en tiempo de ejecución.
+**Alternative**: If using Google Colab, you can let the notebook request the keys at runtime.
 
-### 3. Ejecutar el notebook
+### 3. Run the notebook
 
-**Opción A - VS Code**:
+**Option A - VS Code**:
 ```bash
 jupyter notebook healthbot.ipynb
 ```
 
-**Opción B - Google Colab**:
-- Sube el archivo `healthbot.ipynb` a Google Colab
-- Las dependencias se instalarán automáticamente
+**Option B - Google Colab**:
+- Upload the `healthbot.ipynb` file to Google Colab
+- Dependencies will be installed automatically
 
 ---
 
-## 🚀 Ejecución
+## 🚀 Execution
 
-### Paso 1: Ejecutar todas las celdas
+### Step 1: Run all cells
 
-Presiona `Ctrl+A` y luego `Shift+Enter` para ejecutar todas las celdas en orden, o ejecuta cada una manualmente desde arriba hacia abajo.
+Press `Ctrl+A` then `Shift+Enter` to execute all cells in order, or run each one manually from top to bottom.
 
-### Paso 2: Iniciar el sistema
+### Step 2: Start the system
 
-En la última celda de código, ejecuta:
+In the last code cell, execute:
 
 ```python
 run_healthbot()
 ```
 
-### Paso 3: Interactuar con el sistema
+### Step 3: Interact with the system
 
-El sistema te guiará a través de cada paso con prompts interactivos.
+The system will guide you through each step with interactive prompts.
 
 ---
 
-## 📊 Arquitectura del Proyecto
+## 📊 Project Architecture
 
-### Componentes principales
+### Main Components
 
-#### 1. **Estado Compartido (HealthBotState)**
+#### 1. **Shared State (HealthBotState)**
 ```python
 {
-    "topic": str                # Tema ingresado
-    "search_results": dict      # Resultados de Tavily
-    "summary": str              # Resumen generado
-    "quiz_question": str        # Pregunta del quiz
-    "user_answer": str          # Respuesta (A,B,C,D)
-    "grade": str                # Calificación (A-F)
-    "justification": str        # Explicación + citas
-    "continue_learning": bool   # ¿Continuar?
-    "current_step": str         # Paso actual
+    "topic": str                # Topic entered
+    "search_results": dict      # Tavily results
+    "summary": str              # Generated summary
+    "quiz_question": str        # Quiz question
+    "user_answer": str          # User response (A,B,C,D)
+    "grade": str                # Grade (A-F)
+    "justification": str        # Explanation + citations
+    "continue_learning": bool   # Continue?
+    "current_step": str         # Current step
 }
 ```
 
-#### 2. **Nodos del Grafo**
+#### 2. **Graph Nodes**
 
-| Nodo | Función | Entrada | Salida |
-|------|---------|---------|--------|
-| `input_topic` | Solicita tema del usuario | InteractivoI/O | topic |
-| `search_tavily` | Busca información | topic | search_results |
-| `generate_summary` | Crea resumen (3-4 párrafos) | search_results | summary |
-| `generate_question` | Crea pregunta tipo quiz | summary | quiz_question |
-| `get_user_answer` | Obtiene respuesta del usuario | quiz_question | user_answer |
-| `grade_answer` | Califica respuesta | summary + user_answer | grade + justification |
-| `show_results` | Muestra evaluación | grade + justification | (display) |
-| `decide_next` | Menú continuar/salir | (interactive) | continue_learning |
+| Node | Function | Input | Output |
+|------|----------|-------|--------|
+| `input_topic` | Requests user topic | Interactive I/O | topic |
+| `search_tavily` | Searches information | topic | search_results |
+| `generate_summary` | Creates summary (3-4 paragraphs) | search_results | summary |
+| `generate_question` | Creates quiz question | summary | quiz_question |
+| `get_user_answer` | Gets user response | quiz_question | user_answer |
+| `grade_answer` | Grades response | summary + user_answer | grade + justification |
+| `show_results` | Shows evaluation | grade + justification | (display) |
+| `decide_next` | Continue/exit menu | (interactive) | continue_learning |
 
-#### 3. **Aristas Condicionales**
+#### 3. **Conditional Edges**
 
-- **Después de `decide_next`**:
-  - `continue_learning == True` → Regresa a `input_topic`
-  - `continue_learning == False` → Termina (END)
-
----
-
-## 🎯 Restricciones Implementadas
-
-### ✅ Validadas
-
-1. **NO usar conocimiento previo del modelo**
-   - Prompts explícitos: "Basándote ÚNICAMENTE en..."
-   
-2. **NO usar fuentes externas distintas de Tavily**
-   - Solo `search_results` se pasan a generación de contenido
-   
-3. **Resumen basado 100% en Tavily**
-   - Contexto construido exclusivamente desde `search_results`
-   
-4. **Pregunta respondible desde resumen**
-   - Generada del contenido del resumen
-   
-5. **Calificación con citas textuales**
-   - Justificación incluye fragmentos del resumen
+- **After `decide_next`**:
+  - `continue_learning == True` → Returns to `input_topic`
+  - `continue_learning == False` → Ends (END)
 
 ---
 
-## 🧪 Ejemplo de Ejecución
+## 🎯 Implemented Constraints
+
+### ✅ Validated
+
+1. **Do NOT use model previous knowledge**
+   - Explicit prompts: "Based ONLY on..."
+   
+2. **Do NOT use external sources other than Tavily**
+   - Only `search_results` passed to content generation
+   
+3. **Summary based 100% on Tavily**
+   - Context built exclusively from `search_results`
+   
+4. **Question answerable from summary**
+   - Generated from summary content
+   
+5. **Grading with textual citations**
+   - Justification includes summary excerpts
+
+---
+
+## 🧪 Execution Example
 
 ```
 ============================================================
-🎓 BIENVENIDO A HEALTHBOT - Sistema de Aprendizaje Interactivo
+🎓 WELCOME TO HEALTHBOT - Interactive Learning System
 ============================================================
 
-📚 ¿Cuál es el tema que deseas aprender?
-➜ Inteligencia Artificial
+📚 What topic would you like to learn about?
+➜ Artificial Intelligence
 
-✓ Tema seleccionado: Inteligencia Artificial
+✓ Topic selected: Artificial Intelligence
 
-🔍 Buscando información sobre: Inteligencia Artificial
-✓ Se encontraron 5 fuentes de información
+🔍 Searching for information about: Artificial Intelligence
+✓ Found 5 information sources
   1. wikipedia.org
   2. arxiv.org
   3. github.com
   ...
 
-📝 Generando resumen sobre: Inteligencia Artificial
-✓ Resumen generado exitosamente
+📝 Generating summary about: Artificial Intelligence
+✓ Summary generated successfully
 
-❓ Generando pregunta sobre el tema...
-✓ Pregunta generada exitosamente
-
-============================================================
-📖 RESUMEN DEL TEMA
-============================================================
-
-La Inteligencia Artificial (IA) es...
+❓ Generating question about the topic...
+✓ Question generated successfully
 
 ============================================================
-❓ PREGUNTA DEL QUIZ
+📖 TOPIC SUMMARY
 ============================================================
 
-¿Cuál es la rama de la IA que se enfoca en...?
+Artificial Intelligence (AI) is...
+
+============================================================
+❓ QUIZ QUESTION
+============================================================
+
+Which branch of AI focuses on...?
 A) Machine Learning
 B) Deep Learning
 C) Natural Language Processing
