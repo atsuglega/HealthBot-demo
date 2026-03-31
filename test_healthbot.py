@@ -1,10 +1,10 @@
 """
-Script de prueba automático para HealthBot
-Ejecuta y prueba todo el sistema de forma integrada
+Automatic testing script for HealthBot
+Runs and tests the entire system in an integrated way
 
-Uso:
-  python test_healthbot.py              # Modo normal (requires API calls)
-  python test_healthbot.py --demo       # Modo demo (sin API calls, datos simulados)
+Usage:
+  python test_healthbot.py              # Normal mode (requires API calls)
+  python test_healthbot.py --demo       # Demo mode (without API calls, simulated data)
 """
 
 import os
@@ -16,27 +16,27 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_openai import ChatOpenAI
 from langchain_community.tools.tavily_search.tool import TavilySearchResults
 
-# Cargar variables de entorno
+# Load environment variables
 env_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(env_path)
 
 print("="*60)
-print("🧪 TEST AUTOMÁTICO DE HEALTHBOT")
+print("🧪 HEALTHBOT AUTOMATIC TEST")
 print("="*60)
 
-# Verificar configuración
+# Verify configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 if not OPENAI_API_KEY or not TAVILY_API_KEY:
-    print("\nERROR: Falta OPENAI_API_KEY o TAVILY_API_KEY en .env")
+    print("\nERROR: Missing OPENAI_API_KEY or TAVILY_API_KEY in .env")
     sys.exit(1)
 
-print("\n✅ APIs configuradas:")
+print("\n✅ APIs configured:")
 print(f"   - OPENAI_API_KEY: {OPENAI_API_KEY[:20]}...")
 print(f"   - TAVILY_API_KEY: {TAVILY_API_KEY[:20]}...")
 
-# Inicializar LLM y herramientas
+# Initialize LLM and tools
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     api_key=OPENAI_API_KEY,
@@ -44,9 +44,9 @@ llm = ChatOpenAI(
 )
 search_tool = TavilySearchResults(max_results=5, api_key=TAVILY_API_KEY)
 
-print("\n✅ LLM (OpenAI GPT-4) e Herramientas inicializadas")
+print("\n✅ LLM (OpenAI GPT-4) and Tools initialized")
 
-# Definir TypedDict para el estado
+# Define TypedDict for state
 class HealthBotState(TypedDict):
     topic: str
     search_results: list
@@ -58,43 +58,43 @@ class HealthBotState(TypedDict):
     continue_learning: bool
     current_step: str
 
-# ===== DEFINIR TODAS LAS FUNCIONES =====
+# ===== DEFINE ALL FUNCTIONS =====
 
 def search_tavily(state: HealthBotState) -> HealthBotState:
-    """Buscar información con Tavily"""
-    print(f"\n🔍 Buscando información sobre: {state['topic']}")
+    """Search for information with Tavily"""
+    print(f"\n🔍 Searching for information about: {state['topic']}")
     try:
         results = search_tool.invoke(state['topic'])
-        print(f"   ✓ Se encontraron resultados")
+        print(f"   ✓ Results found")
         state["search_results"] = results if isinstance(results, list) else [results]
     except Exception as e:
-        print(f"   ✗ Error en búsqueda: {e}")
+        print(f"   ✗ Search error: {e}")
         state["search_results"] = []
     return state
 
 def generate_summary(state: HealthBotState) -> HealthBotState:
-    """Generar resumen basado en búsqueda"""
-    print(f"\n📝 Generando resumen...")
+    """Generate summary based on search"""
+    print(f"\n📝 Generating summary...")
     if not state["search_results"]:
-        state["summary"] = "No hay resultados disponibles"
+        state["summary"] = "No results available"
         return state
     
     search_context = "\n".join([str(r) for r in state["search_results"]][:500])
     
-    prompt = f"""Eres un asistente educativo. Genera un resumen de 3-4 párrafos sobre:
+    prompt = f"""You are an educational assistant. Generate a 3-4 paragraph summary about:
     
-Tema: {state['topic']}
+Topic: {state['topic']}
 
-Información disponible:
+Available information:
 {search_context}
 
-Escribe el resumen en español, basándote ÚNICAMENTE en la información proporcionada."""
+Write the summary in English, based ONLY on the provided information."""
     
     try:
         message = HumanMessage(content=prompt)
         response = llm.invoke([message])
         state["summary"] = response.content
-        print("   ✓ Resumen generado")
+        print("   ✓ Summary generated")
     except Exception as e:
         print(f"   ✗ Error: {e}")
         state["summary"] = f"Error: {str(e)}"
@@ -102,27 +102,27 @@ Escribe el resumen en español, basándote ÚNICAMENTE en la información propor
     return state
 
 def generate_question(state: HealthBotState) -> HealthBotState:
-    """Generar pregunta del quiz"""
-    print(f"\n❓ Generando pregunta...")
+    """Generate quiz question"""
+    print(f"\n❓ Generating question...")
     
-    prompt = f"""Basándote ÚNICAMENTE en el siguiente resumen, genera una pregunta de opción múltiple:
+    prompt = f"""Based ONLY on the following summary, generate a multiple-choice question:
 
-RESUMEN:
+SUMMARY:
 {state['summary']}
 
-Formato:
-PREGUNTA: [Tu pregunta aquí]
-A: [Opción correcta]
-B: [Opción incorrecta 1]
-C: [Opción incorrecta 2]
-D: [Opción incorrecta 3]
-RESPUESTA_CORRECTA: A"""
+Format:
+QUESTION: [Your question here]
+A: [Correct option]
+B: [Incorrect option 1]
+C: [Incorrect option 2]
+D: [Incorrect option 3]
+CORRECT_ANSWER: A"""
     
     try:
         message = HumanMessage(content=prompt)
         response = llm.invoke([message])
         state["quiz_question"] = response.content
-        print("   ✓ Pregunta generada")
+        print("   ✓ Question generated")
     except Exception as e:
         print(f"   ✗ Error: {e}")
         state["quiz_question"] = f"Error: {str(e)}"
@@ -130,27 +130,27 @@ RESPUESTA_CORRECTA: A"""
     return state
 
 def grade_answer(state: HealthBotState, user_answer: str = "A") -> HealthBotState:
-    """Calificar respuesta automáticamente"""
-    print(f"\n⏳ Evaluando respuesta...")
+    """Grade answer automatically"""
+    print(f"\n⏳ Evaluating answer...")
     
-    grading_prompt = f"""Eres un evaluador educativo. Califica la respuesta del usuario:
+    grading_prompt = f"""You are an educational evaluator. Grade the user's answer:
 
-RESUMEN:
+SUMMARY:
 {state['summary']}
 
-PREGUNTA:
+QUESTION:
 {state['quiz_question']}
 
-RESPUESTA DEL USUARIO: {user_answer}
+USER ANSWER: {user_answer}
 
-Asigna una calificación (A/B/C/D/F) y proporciona justificación."""
+Assign a grade (A/B/C/D/F) and provide justification."""
     
     try:
         message = HumanMessage(content=grading_prompt)
         response = llm.invoke([message])
-        state["grade"] = "A"  # Asignar calificación por defecto
+        state["grade"] = "A"  # Assign default grade
         state["justification"] = response.content
-        print("   ✓ Respuesta evaluada")
+        print("   ✓ Answer evaluated")
     except Exception as e:
         print(f"   ✗ Error: {e}")
         state["grade"] = "C"
@@ -158,75 +158,75 @@ Asigna una calificación (A/B/C/D/F) y proporciona justificación."""
     
     return state
 
-# ===== MODO DEMO (SIN API CALLS) =====
+# ===== DEMO MODE (WITHOUT API CALLS) =====
 
 def run_demo_mode():
-    """Ejecutar demostración sin llamadas a API (datos simulados)"""
+    """Run demonstration without API calls (simulated data)"""
     print("\n" + "="*60)
-    print("🎬 MODO DEMO - Simulación sin API calls")
+    print("🎬 DEMO MODE - Simulation without API calls")
     print("="*60)
     
-    # Datos simulados de un flujo completo
+    # Simulated data from a complete flow
     demo_data = {
-        "topic": "Fotosíntesis",
+        "topic": "Photosynthesis",
         "search_results": [
-            {"source": "Wikipedia", "content": "La fotosíntesis es un proceso metabólico..."},
-            {"source": "Khan Academy", "content": "La fotosíntesis ocurre en los cloroplastos..."},
+            {"source": "Wikipedia", "content": "Photosynthesis is a metabolic process..."},
+            {"source": "Khan Academy", "content": "Photosynthesis occurs in chloroplasts..."},
         ],
-        "summary": """La fotosíntesis es el proceso mediante el cual las plantas convierten la luz solar en energía química.
+        "summary": """Photosynthesis is the process by which plants convert sunlight into chemical energy.
         
-Ocurre principalmente en las hojas, dentro de estructuras especializadas llamadas cloroplastos que contienen clorofila.
-Durante este proceso, las plantas absorben dióxido de carbono del aire y agua del suelo, utilizando la energía solar para producir glucosa y oxígeno.
+It occurs mainly in leaves, within specialized structures called chloroplasts that contain chlorophyll.
+During this process, plants absorb carbon dioxide from the air and water from the soil, using solar energy to produce glucose and oxygen.
 
-La fotosíntesis consta de dos fases: la fase luminosa, que requiere luz directa, y la fase oscura (ciclo de Calvin), que no la requiere.""",
-        "quiz_question": """PREGUNTA: ¿Cuál es la principal función del proceso de fotosíntesis?
-A: Convertir luz solar en energía química (glucosa)
-B: Descomponer moléculas de agua
-C: Absorber nutrientes del suelo
-D: Producir ATP exclusivamente
+Photosynthesis consists of two phases: the light phase, which requires direct light, and the dark phase (Calvin cycle), which does not.""",
+        "quiz_question": """QUESTION: What is the main function of the photosynthesis process?
+A: Convert sunlight into chemical energy (glucose)
+B: Decompose water molecules
+C: Absorb nutrients from soil
+D: Produce ATP exclusively
 
-RESPUESTA_CORRECTA: A""",
+CORRECT_ANSWER: A""",
         "user_answer": "A",
         "grade": "A",
-        "justification": "✅ CORRECTO. La fotosíntesis convierte la energía luminosa en energía química almacenada en glucosa. El proceso es fundamental para la vida en el planeta.",
+        "justification": "✅ CORRECT. Photosynthesis converts light energy into chemical energy stored in glucose. The process is fundamental to life on the planet.",
     }
     
-    # Mostrar flujo completo
-    print(f"\n1️⃣ TEMA: {demo_data['topic']}")
-    print("   ✓ Tema ingresado")
+    # Show complete flow
+    print(f"\n1️⃣ TOPIC: {demo_data['topic']}")
+    print("   ✓ Topic entered")
     
-    print(f"\n2️⃣ BÚSQUEDA")
-    print(f"   ✓ Se encontraron {len(demo_data['search_results'])} fuentes")
+    print(f"\n2️⃣ SEARCH")
+    print(f"   ✓ Found {len(demo_data['search_results'])} sources")
     for src in demo_data['search_results']:
         print(f"      - {src['source']}")
     
-    print(f"\n3️⃣ RESUMEN")
+    print(f"\n3️⃣ SUMMARY")
     print(f"   {demo_data['summary']}")
     
-    print(f"\n4️⃣ PREGUNTA DE EVALUACIÓN")
+    print(f"\n4️⃣ EVALUATION QUESTION")
     print(f"   {demo_data['quiz_question']}")
     
-    print(f"\n5️⃣ RESPUESTA DEL USUARIO: {demo_data['user_answer']}")
+    print(f"\n5️⃣ USER ANSWER: {demo_data['user_answer']}")
     
-    print(f"\n6️⃣ CALIFICACIÓN")
-    print(f"   Grado: {demo_data['grade']}")
+    print(f"\n6️⃣ GRADE")
+    print(f"   Grade: {demo_data['grade']}")
     print(f"   {demo_data['justification']}")
     
     print("\n" + "="*60)
-    print("✅ DEMOSTRACIÓN COMPLETADA EXITOSAMENTE")
+    print("✅ DEMONSTRATION COMPLETED SUCCESSFULLY")
     print("="*60)
 
-# ===== PRUEBA AUTOMÁTICA (CON API CALLS) =====
+# ===== AUTOMATIC TEST (WITH API CALLS) =====
 
 def run_full_test():
-    """Ejecutar prueba completa con llamadas reales a API"""
+    """Run full test with real API calls"""
     print("\n" + "="*60)
-    print("🧪 PRUEBA COMPLETA - Llamadas reales a API")
+    print("🧪 FULL TEST - Real API calls")
     print("="*60)
     
-    # Estado inicial
+    # Initial state
     test_state = {
-        "topic": "Fotosíntesis",
+        "topic": "Photosynthesis",
         "search_results": [],
         "summary": "",
         "quiz_question": "",
@@ -237,56 +237,57 @@ def run_full_test():
         "current_step": "search"
     }
     
-    # Ejecutar pipeline
-    print(f"\n1️⃣ TEMA: {test_state['topic']}")
+    # Execute pipeline
+    print(f"\n1️⃣ TOPIC: {test_state['topic']}")
     test_state = search_tavily(test_state)
     
-    print(f"\n2️⃣ RESUMEN")
+    print(f"\n2️⃣ SUMMARY")
     test_state = generate_summary(test_state)
     if test_state["summary"]:
         print(f"   {test_state['summary'][:200]}...")
     
-    print(f"\n3️⃣ PREGUNTA")
+    print(f"\n3️⃣ QUESTION")
     test_state = generate_question(test_state)
     if test_state["quiz_question"]:
         print(f"   {test_state['quiz_question'][:200]}...")
     
-    print(f"\n4️⃣ RESPUESTA SIMULADA: A")
+    print(f"\n4️⃣ SIMULATED ANSWER: A")
     
-    print(f"\n5️⃣ CALIFICACIÓN")
+    print(f"\n5️⃣ GRADE")
     test_state = grade_answer(test_state, "A")
-    print(f"   Grado: {test_state['grade']}")
+    print(f"   Grade: {test_state['grade']}")
     
     print("\n" + "="*60)
-    print("✅ PRUEBA COMPLETADA EXITOSAMENTE")
+    print("✅ TEST COMPLETED SUCCESSFULLY")
     print("="*60)
 
 # ===== MAIN =====
 
 if __name__ == "__main__":
-    # Parsear argumentos
-    parser = argparse.ArgumentParser(description="Test suite para HealthBot")
-    parser.add_argument("--demo", action="store_true", help="Ejecutar en modo demo (sin API calls)")
+    # Parse arguments
+    parser = argparse.ArgumentParser(description="Test suite for HealthBot")
+    parser.add_argument("--demo", action="store_true", help="Run in demo mode (without API calls)")
     args = parser.parse_args()
     
     if args.demo:
-        # Modo demo (sin API keys necesarias)
+        # Demo mode (no API keys needed)
         run_demo_mode()
     else:
-        # Modo normal (con API calls)
-        # Verificar configuración
+        # Normal mode (with API calls)
+        # Verify configuration
         OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
         TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
         
         if not OPENAI_API_KEY or not TAVILY_API_KEY:
-            print("\n❌ ERROR: Falta OPENAI_API_KEY o TAVILY_API_KEY en .env")
-            print("\n    Para modo demo sin API keys: python test_healthbot.py --demo")
+            print("\n❌ ERROR: Missing OPENAI_API_KEY or TAVILY_API_KEY in .env")
+            print("\n    For demo mode without API keys: python test_healthbot.py --demo")
             sys.exit(1)
         
-        print("\n✅ APIs configuradas:")
+        print("\n✅ APIs configured:")
         print(f"   - OPENAI_API_KEY: {OPENAI_API_KEY[:20]}...")
         print(f"   - TAVILY_API_KEY: {TAVILY_API_KEY[:20]}...")
-        print("\n✅ LLM (OpenAI GPT-4) e Herramientas inicializadas")
+        print("\n✅ LLM (OpenAI GPT-4) and Tools initialized")
         
-        # Ejecutar prueba completa
+        # Execute full test
         run_full_test()
+

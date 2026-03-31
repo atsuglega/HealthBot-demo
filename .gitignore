@@ -1,15 +1,15 @@
-# 🔒 ARCHIVOS CON DATOS SENSIBLES - NO VERSIONEAR
+# 🔒 FILES WITH SENSITIVE DATA - DO NOT VERSION CONTROL
 
-# Variables de entorno con API keys
+# Environment variables with API keys
 .env
 
-# Entorno virtual Python
+# Python virtual environment
 .venv/
 venv/
 env/
 ENV/
 
-# Caché de Python
+# Python cache
 __pycache__/
 *.py[cod]
 *$py.class
