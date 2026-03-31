@@ -200,153 +200,153 @@ B) Deep Learning
 C) Natural Language Processing
 D) Computer Vision
 
-✏️ Tu respuesta (A, B, C o D): A
+✏️ Your answer (A, B, C or D): A
 
-⏳ Evaluando tu respuesta...
-
-============================================================
-📊 RESULTADOS DE TU EVALUACIÓN
-============================================================
-
-Tu respuesta: A
-
-CALIFICACIÓN: 🌟 EXCELENTE
-
-JUSTIFICACIÓN:
-Tu respuesta es correcta. El resumen indica que...
-CITA DEL RESUMEN: "Machine Learning es la rama de la IA..."
+⏳ Evaluating your response...
 
 ============================================================
-¿QUÉ DESEAS HACER?
+📊 YOUR EVALUATION RESULTS
 ============================================================
 
-1. Aprender un nuevo tema
-2. Salir del sistema
+Your answer: A
 
-➜ Selecciona una opción (1 o 2): 2
+GRADE: 🌟 EXCELLENT
+
+JUSTIFICATION:
+Your answer is correct. The summary indicates that...
+SUMMARY CITATION: "Machine Learning is the branch of AI..."
 
 ============================================================
-👋 ¡Gracias por usar HealthBot!
+WHAT WOULD YOU LIKE TO DO?
 ============================================================
 
-¡Que sigas aprendiendo! 📚
+1. Learn a new topic
+2. Exit the system
+
+➜ Select an option (1 or 2): 2
+
+============================================================
+👋 Thank you for using HealthBot!
+============================================================
+
+Keep learning! 📚
 ```
 
 ---
 
-## 🎯 Resultados Esperados
+## 🎯 Expected Results
 
-Al ejecutar el sistema, deberías observar:
+When running the system, you should observe:
 
-### ✅ Búsqueda Web (Tavily)
+### ✅ Web Search (Tavily)
 ```
-🔍 Buscando información sobre: [Tu tema]
-✓ Se encontraron 5 resultados desde fuentes reales
+🔍 Searching for information about: [Your topic]
+✓ Found 5 results from real sources
   1. https://source1.com
   2. https://source2.com
   ...
 ```
 
-### ✅ Generación de Contenido
+### ✅ Content Generation
 ```
-📝 Resumen generado (3-4 párrafos coherentes)
-✓ Basado exclusivamente en resultados de búsqueda
-✓ En español, lenguaje accesible
-```
-
-### ✅ Evaluación Inteligente
-```
-Calificación: A (Excelente)
-Justificación: [Explicación detallada]
-Cita del material: "[Fragmento relevante]"
+📝 Summary generated (3-4 coherent paragraphs)
+✓ Based exclusively on search results
+✓ In English, accessible language
 ```
 
-### ✅ Experiencia Interactiva
-- Flujo conversacional natural
-- Menú para continuar aprendiendo o salir
-- Loop infinito de educación
+### ✅ Intelligent Evaluation
+```
+Grade: A (Excellent)
+Justification: [Detailed explanation]
+Material citation: "[Relevant fragment]"
+```
+
+### ✅ Interactive Experience
+- Natural conversational flow
+- Menu to continue learning or exit
+- Infinite loop of education
 
 ---
 
-## 🧪 Testing y Validación
+## 🧪 Testing and Validation
 
-### Opción 1: Modo Demo (Sin API Keys)
-Ideal para demostración rápida sin costar dinero:
+### Option 1: Demo Mode (Without API Keys)
+Ideal for quick demonstration without spending money:
 ```bash
 python test_healthbot.py --demo
 ```
-Ejecuta con **datos simulados** (resultado garantizado en <1 segundo)
+Runs with **simulated data** (result guaranteed in <1 second)
 
-### Opción 2: Testing Completo (Con APIs)
-Valida integración real con OpenAI y Tavily:
+### Option 2: Full Testing (With APIs)
+Validates real integration with OpenAI and Tavily:
 ```bash
 python test_healthbot.py
 ```
-Requiere `OPENAI_API_KEY` y `TAVILY_API_KEY` en `.env`
+Requires `OPENAI_API_KEY` and `TAVILY_API_KEY` in `.env`
 
-### Opción 3: Uso Interactivo
-Experiencia educativa completa:
+### Option 3: Interactive Use
+Complete educational experience:
 ```bash
 jupyter notebook healthbot.ipynb
-# Ejecutar todas las celdas
-# Correr: run_healthbot()
+# Run all cells
+# Run: run_healthbot()
 ```
 
 ---
 
-## 📋 Checklist de Requisitos
+## 📋 Requirements Checklist
 
-### Funcionales ✅
-- [x] Solicitar tema de aprendizaje
-- [x] Usar Tavily como herramienta de búsqueda
-- [x] Generar resumen en español (3-4 párrafos)
-- [x] Crear pregunta tipo quiz
-- [x] Solicitar respuesta del usuario
-- [x] Calificar (A-F) con justificación y citas
-- [x] Permitir reinicio/salida
+### Functional ✅
+- [x] Request learning topic
+- [x] Use Tavily as search tool
+- [x] Generate summary (3-4 paragraphs)
+- [x] Create quiz-type question
+- [x] Request user response
+- [x] Grade (A-F) with justification and citations
+- [x] Allow restart/exit
 
-### Técnicos ✅
-- [x] Implementar con LangGraph
-- [x] Estado compartido actualizado por nodos
-- [x] Cada nodo con responsabilidad única
-- [x] Aristas condicionales para flujo
-- [x] Tavily como herramienta externa
-- [x] OpenAI para generación y evaluación
+### Technical ✅
+- [x] Implement with LangGraph
+- [x] Shared state updated by nodes
+- [x] Each node with single responsibility
+- [x] Conditional edges for flow
+- [x] Tavily as external tool
+- [x] OpenAI for generation and evaluation
 
-### Restricciones ✅
-- [x] NO conocimiento previo
-- [x] NO fuentes externas (solo Tavily)
-- [x] Resumen exclusivamente de Tavily
-- [x] Pregunta desde resumen
-- [x] Evaluación basada en resumen
-
----
-
-## 🐛 Solución de Problemas
-
-### "Error: OPENAI_API_KEY no configurada"
-→ Asegúrate de tener un archivo `.env` con tu clave de OpenAI
-
-### "Error: TAVILY_API_KEY no configurada"
-→ Regístrate en [tavily.com](https://tavily.com) y añade tu clave al `.env`
-
-### "No se encontraron resultados de búsqueda"
-→ Intenta con un tema más general o verifica tu conexión a internet
-
-### "Error: El grafo no puede ser compilado"
-→ Verifica que todas las funciones de nodos estén definidas antes de `create_healthbot_graph()`
+### Constraints ✅
+- [x] NO prior knowledge
+- [x] NO external sources (only Tavily)
+- [x] Summary exclusively from Tavily
+- [x] Question from summary
+- [x] Evaluation based on summary
 
 ---
 
-## 📝 Licencia
+## 🐛 Troubleshooting
 
-Este proyecto fue desarrollado como parte de un ejercicio de aprendizaje con LangGraph, OpenAI y Tavily.
+### "Error: OPENAI_API_KEY not found"
+→ Make sure you have a `.env` file with your OpenAI key
+
+### "Error: TAVILY_API_KEY not found"
+→ Sign up at [tavily.com](https://tavily.com) and add your key to `.env`
+
+### "No search results found"
+→ Try with a more general topic or check your internet connection
+
+### "Error: Graph cannot be compiled"
+→ Verify all node functions are defined before `create_healthbot_graph()`
 
 ---
 
-## 👨‍💻 Autor
+## 📝 License
 
-Desarrollado como sistema de demostración educativa.
+This project was developed as part of a learning exercise with LangGraph, OpenAI, and Tavily.
+
+---
+
+## 👨‍💻 Author
+
+Developed as an educational demonstration system.
 
 ---
 

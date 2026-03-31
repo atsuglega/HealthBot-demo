@@ -1,24 +1,24 @@
-# HealthBot - Dependencias del Proyecto
-# Instala con: pip install -r requirements.txt
+# HealthBot - Project Dependencies
+# Install with: pip install -r requirements.txt
 
-# Core LangGraph y LangChain
+# Core LangGraph and LangChain
 langgraph>=0.0.30
 langchain>=0.1.0
 langchain-core>=0.1.0
 
-# Integración con OpenAI (GPT-4)
+# Integration with OpenAI (GPT-4)
 langchain-openai>=0.1.0
 openai>=1.0.0
 
-# Integración con Tavily Search
+# Integration with Tavily Search
 langchain-tavily>=0.1.0
 
-# Utilidades
+# Utilities
 python-dotenv>=1.0.0
 
-# Opcional pero recomendado
-ipython>=8.0.0  # Para mejores notebooks
-jupyter>=1.0.0  # Para ejecutar notebooks
+# Optional but recommended
+ipython>=8.0.0  # For better notebooks
+jupyter>=1.0.0  # For running notebooks
 
-# Especificaciones de versión mínima de Python
-# Requiere: Python 3.9 o superior
+# Minimum Python version specifications
+# Requires: Python 3.9 or higher
